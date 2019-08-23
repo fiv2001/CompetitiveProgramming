@@ -1,0 +1,225 @@
+/*
+    We make two bipartite graphs for d1 and d2; We take the biggest part in the first graph and then we
+    take the part in the second graph which contains more vertices from the biggest part of the first graph.
+*/
+
+#include <bits/stdc++.h>
+#include <complex>
+#define pb push_back
+#define pll pair <ll, ll>
+#define MOMI using namespace std;
+#define mp make_pair
+#define pyshnapyshnakaa ios_base :: sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#pragma optimize("TKACHENKO-GORYACHENKO")
+#pragma GCC optimize("O3")
+
+//#pragma GCC optimize("unroll-loops")
+//#define double long double
+
+typedef long long ll;
+
+typedef long double ld;
+
+using namespace std;
+
+const ll maxn = 700;
+const ll inf = 1e16;
+
+ll n, m, k;
+
+ll d1, d2;
+
+vector <vector <ll> > used;
+
+vector <pll> ANS;
+
+vector <pll> X;
+
+vector <vector <vector <pll> > > G;
+
+ll M[maxn][maxn];
+
+bool in(ll x, ll y){
+    return x >= 0 && x < 2 * n && y >= 0 && y < 2 * n;
+}
+
+void dfs(ll x, ll y, ll c){
+    ll q;
+    used[x][y] = c;
+    for (q = 0; q < G[x][y].size(); q++){
+        ll nx = G[x][y][q].first, ny = G[x][y][q].second;
+        if (!used[nx][ny]){
+            dfs(nx, ny, 3 - c);
+        }
+    }
+}
+
+void solve(vector <vector <vector <pll>>> V){
+    ll q, w;
+    G = V;
+    for (q = 0; q < 2 * n; q++){
+        for (w = 0; w < 2 * n; w++){
+            used[q][w] = 0;
+        }
+    }
+    for (q = 0; q < 2 * n; q++){
+        for (w = 0; w < 2 * n; w++){
+            if (!used[q][w]){
+                dfs(q, w, 1);
+            }
+        }
+    }
+}
+
+int main() {
+    ll q, w, e, a, b, t;
+//    pyshnapyshnakaa;
+    used.resize(maxn);
+    for (q = 0; q < maxn - 1; q++){
+        used[q].resize(maxn);
+    }
+    cin >> n >> d1 >> d2;
+    vector <pll> C;
+    vector <pll> C1;
+    for (q = 0; q * q <= d1; q++){
+        for (w = 0; w * w <= d1; w++){
+            if (q * q + w * w == d1){
+                C.pb(mp(q, w));
+            }
+        }
+    }
+    for (q = 0; q * q <= d2; q++){
+        for (w = 0; w * w <= d2; w++){
+            if (q * q + w * w == d2){
+                C1.pb(mp(q, w));
+            }
+        }
+    }
+    vector <vector <vector <pll> > > V;
+    vector <vector <vector <pll> > > V1;
+    V.resize(2 * n);
+    for (q = 0; q < 2 * n; q++){
+        V[q].resize(2 * n);
+    }
+    V1.resize(2 * n);
+    for (q = 0; q < 2 * n; q++){
+        V1[q].resize(2 * n);
+    }
+    for (q = 0; q < 2 * n; q++){
+        for (w = 0; w < 2 * n; w++){
+            for (e = 0; e < C.size(); e++){
+                ll a = C[e].first, b = C[e].second;
+                ll x, y;
+                x = q + a, y = w + b;
+                if (in(x, y)){
+                    V[q][w].pb(mp(x, y));
+                }
+                x = q + a, y = w - b;
+                if (in(x, y)){
+                    V[q][w].pb(mp(x, y));
+                }
+                x = q - a, y = w + b;
+                if (in(x, y)){
+                    V[q][w].pb(mp(x, y));
+                }
+                x = q - a, y = w - b;
+                if (in(x, y)){
+                    V[q][w].pb(mp(x, y));
+                }
+            }
+        }
+    }
+    for (q = 0; q < 2 * n; q++){
+        for (w = 0; w < 2 * n; w++){
+            for (e = 0; e < C1.size(); e++){
+                ll a = C1[e].first, b = C1[e].second;
+                ll x, y;
+                x = q + a, y = w + b;
+                if (in(x, y)){
+                    V1[q][w].pb(mp(x, y));
+                }
+                x = q + a, y = w - b;
+                if (in(x, y)){
+                    V1[q][w].pb(mp(x, y));
+                }
+                x = q - a, y = w + b;
+                if (in(x, y)){
+                    V1[q][w].pb(mp(x, y));
+                }
+                x = q - a, y = w - b;
+                if (in(x, y)){
+                    V1[q][w].pb(mp(x, y));
+                }
+            }
+        }
+    }
+    solve(V);
+    vector <vector <ll> > used1 = used;
+    solve(V1);
+    vector <vector <ll> > used2 = used;
+//    for (q = 0; q < 2 * n; q++){
+//        for (w = 0; w < 2 * n; w++){
+//            cout << used1[q][w] << " ";
+//        }
+//        cout << endl;
+//    }
+//    cout << endl;
+//    for (q = 0; q < 2 * n; q++){
+//        for (w = 0; w < 2 * n; w++){
+//            cout << used2[q][w] << " ";
+//        }
+//        cout << endl;
+//    }
+//    cout << endl;
+    ll c1 = 0, c2 = 0, ans1;
+    for (q = 0; q < 2 * n; q++){
+        for (w = 0; w < 2 * n; w++){
+            if (used1[q][w] == 1){
+                c1++;
+            }
+            else{
+                c2++;
+            }
+        }
+    }
+    if (c1 > c2){
+        ans1 = 1;
+    }
+    else{
+        ans1 = 2;
+    }
+    c1 = 0, c2 = 0;
+    ll ans2;
+    for (q = 0; q < 2 * n; q++){
+        for (w = 0; w < 2 * n; w++){
+            if (used1[q][w] != ans1){
+                continue;
+            }
+            if (used2[q][w] == 1){
+                c1++;
+            }
+            else{
+                c2++;
+            }
+        }
+    }
+    if (c1 > c2){
+        ans2 = 1;
+    }
+    else{
+        ans2 = 2;
+    }
+    ll cnt = 0;
+    for (q = 0; q < 2 * n; q++){
+        for (w = 0; w < 2 * n; w++){
+            if (used1[q][w] == ans1 && used2[q][w] == ans2){
+                cnt++;
+                cout << q << " " << w << endl;
+                if (cnt == n * n){
+                    return 0;
+                }
+            }
+        }
+    }
+    return -1;
+}
