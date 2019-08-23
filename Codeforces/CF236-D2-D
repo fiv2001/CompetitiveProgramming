@@ -1,0 +1,51 @@
+/*
+  We make two dps: the expected value of the last sequence of O-s and the expected value of points.
+*/
+
+#include <bits/stdc++.h>
+#include <complex>
+#define pb push_back
+#define pll pair <ll, ll>
+#define MOMI using namespace std;
+#define mp make_pair
+#define pyshnapyshnakaa ios_base :: sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#pragma optimize("TKACHENKO-GORYACHENKO")
+#pragma GCC optimize("O3")
+
+//#pragma GCC optimize("unroll-loops")
+//#define double long double
+
+typedef long long ll;
+
+typedef long double ld;
+
+using namespace std;
+
+const ll maxn = 2e5;
+const ll inf = 1e16;
+
+ll n, m, k;
+
+double P[maxn];
+
+double D[maxn];
+
+double D1[maxn];
+
+int main() {
+    ll q, w, e, a, b, t;
+//    pyshnapyshnakaa;
+    cin >> n;
+    cout << setprecision(10) << fixed;
+    for (q = 0; q < n; q++){
+        cin >> P[q];
+    }
+    D1[0] = P[0];
+    D[0] = P[0];
+    for (q = 1; q < n; q++){
+        D1[q] = (D1[q - 1] + 1) * P[q];
+        D[q] = D[q - 1] * (1 - P[q]) + P[q] * (D[q - 1] + 1 + 2 * D1[q - 1]);
+    }
+    cout << D[n - 1];
+    return 0;
+}
