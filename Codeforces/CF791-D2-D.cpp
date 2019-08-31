@@ -1,6 +1,8 @@
 /*
   We dfs our tree and while dfsing we maintain for each j the amount of paths from vertex v to vertexes from it's subtree which 
   length has remainder j (mod k); Also we maintain the same thing but for paths from vertex v to vertexes not from the subtree of v;
+  then using it we can maintain the answer for vertex v: sum of all other vertexes v1 the number of jumps a bear has to jump to get from
+  vertex v to vertex v1; then we take the sum of it for all vertices and divide it by 2 because we counted every pair of vertices 2 times.
 */
 #include <bits/stdc++.h>
 #include <complex>
