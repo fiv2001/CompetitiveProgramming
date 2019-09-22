@@ -21,7 +21,7 @@ typedef long double ld;
 
 using namespace std;
 
-const ll maxn = 2e6;
+const ll maxn = 3e6;
 const ll inf = 1e15;
 
 ll n, m, k, mx;
@@ -53,6 +53,8 @@ bool used[maxn];
 
 vector <ll> P;
 
+vector <ll> RV[maxn];
+
 ll RP[maxn];
 
 ll C[maxn];
@@ -74,9 +76,9 @@ void dfs1(ll v){
     used[v] = 1;
     C[v] = color;
     ll q;
-    for (q = 0; q < V[v].size(); q++){
-        if (!used[V[v][q]]){
-            dfs1(V[v][q]);
+    for (q = 0; q < RV[v].size(); q++){
+        if (!used[RV[v][q]]){
+            dfs1(RV[v][q]);
         }
     }
 }
@@ -88,12 +90,14 @@ ll ans = 0;
 int main(){
     ll q, w, e, t, a, b, c;
     cin >> n >> k >> mx >> m;
+    mx += 10;
     for (q = 0; q < n; q++){
         cin >> a >> b;
         a--; b--;
         add_edge(a, 0, b, 1);
         add_edge(b, 0, a, 1);
     }
+    cout << endl;
     for (q = 0; q < k; q++){
         cin >> a >> b;
         ll j = getj(b, 0);
@@ -108,12 +112,14 @@ int main(){
         V[i].pb(j1);
 //        cout << "j1 j i " << j1 << " " << j << " " << i << endl;
     }
+    cout << endl;
     for (q = 0; q < m; q++){
         cin >> a >> b;
         a--; b--;
         add_edge(a, 1, b, 0);
         add_edge(b, 1, a, 0);
     }
+    cout << endl;
     for (q = 0; q <= mx; q++){
         if (q != 0){
             ll j = getj(q, 1);
@@ -126,7 +132,12 @@ int main(){
             V[j1].pb(j);
         }
     }
-    ll nv = 2 * (k + mx + 10);
+    for (q = 0; q < maxn; q++){
+        for (w = 0; w < V[q].size(); w++){
+            RV[V[q][w]].pb(q);
+        }
+    }
+    ll nv = 2 * (k + mx + 100);
     for (q = 0; q < nv; q++){
         if (!used[q]){
             dfs(q);
@@ -139,6 +150,10 @@ int main(){
     for (q = 0; q < nv; q++){
         used[q] = 0;
     }
+    for (q = 0; q < nv; q++){
+        RP[P[q]] = q;
+    }
+    reverse(P.begin(), P.end());
     for (q = 0; q < nv; q++){
         if (!used[P[q]]){
             dfs1(P[q]);
@@ -153,9 +168,6 @@ int main(){
         }
     }
     ll mn = inf;
-    for (q = 0; q < nv; q++){
-        RP[P[q]] = q;
-    }
     for (q = 0; q < nv; q++){
         if (!(RP[q] < RP[getnx(q)])){
             continue;
