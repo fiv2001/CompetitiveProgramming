@@ -1,0 +1,85 @@
+/*
+      Algorithm : we build a directed graph where x -> y if x and y don't like each other and x has bigger salary than y; Then we 
+      stupidly simulate the process of the vertex getting the highest salary. We maintain for every vertex i the vertex which have 
+      an vertex in i and the amount of edges from i; 
+      Proof: we will prove that this works in O(n * sqrt(n)) (n == m == q); Let's sort the vertexes by the amount of sum of edges from the vertex and
+      in the vertex in descending order; then we see that every vertex has no more than sqrt(2 * m) vertex to the left from that vertex;
+      Otherwise there are more than sqrt(2 * m) * sqrt(2 * m) = 2 * m sum of edges in the whole graph, which is a contradiction, because
+      it's equal to 2 * m; So let's define the potential of the graph as the sum of edges from right to left in a directed
+      graph; The amount of edges from right to left increases every turn by no more than sqrt(2 * m); and at the start it's equal to m;
+      Then it's always O(n ^ (3 / 2)); Then we can see that every turn we make the amount of operations equal to the amount of vertexes 
+      which have an edge to the our vertex; There are 2 types of them : from left to right and from right to left; The first amount in
+      sum is O(n ^ (3 / 2)) and the second is <= sqrt(2 * m) every turn because every vertex has no more than sqrt(2 * m) edges to the
+      left, it was proved before; Then the whole algorithm works in O(n ^ (3 / 2));
+*/
+#include <bits/stdc++.h>
+#include <complex>
+#define pb push_back
+#define pll pair <ll, ll>
+#define MOMI using namespace std;
+#define mp make_pair
+#define pyshnapyshnakaa ios_base :: sync_with_stdio(0); cin.tie(0); cout.tie(0);
+#pragma optimize("TKACHENKO-GORYACHENKO")
+#pragma GCC optimize("O3")
+#pragma GCC optimize("Ofast")
+
+//#pragma GCC optimize("unroll-loops")
+
+typedef int ll;
+
+typedef long double ld;
+
+using namespace std;
+
+const ll maxn = 1e5 + 100;
+const ll mod = 1e9 + 7;
+
+ll n, m, k;
+
+vector <ll> RV[maxn];
+
+vector <ll> V[maxn];
+
+int main(){
+    ll q, w, e, t, a, b, c;
+    cin >> n >> m;
+    for (q = 0; q < m; q++){
+        cin >> a >> b;
+        a--; b--;
+        V[max(a, b)].pb(min(a, b));
+        RV[min(a, b)].pb(max(a, b));
+    }
+    long long ans = 0;
+    for (q = 0; q < n; q++){
+        for (auto w : V[q]){
+            ll i = w;
+            ans += V[i].size();
+        }
+    }
+    cin >> k;
+    cout << ans << endl;
+    for (e = 0; e < k; e++){
+        cin >> a;
+        a--;
+//        for (q = 0; q < RV[a].size(); q++){
+
+        ans -= RV[a].size() * 1LL *  V[a].size();
+        for (auto p : RV[a]){
+//            cout << "P " << p << " ";
+            ll i = p;
+            ans -= RV[i].size();
+//        cout << RV[i].size() << " ";
+//            ?????????? V[i].erase(a);
+            V[i].pop_back();
+            ans += V[i].size();
+//            cout << V[i].size() << endl;
+            RV[i].pb(a);
+        }
+        for (auto p : RV[a]){
+            V[a].pb(p);
+        }
+        RV[a].clear();
+        cout << ans << endl;
+    }
+    return 0;
+}
