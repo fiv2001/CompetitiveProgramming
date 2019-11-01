@@ -228,34 +228,6 @@ inline ll slowR(ll i, ll x, ll r) {
 	return ans;
 }
  
-inline ll bpl(ll i, ll x) {
-	ll l = -1, r = L[i].size(), M;
-	while (r - l > 1) {
-		M = (l + r) / 2;
-		if (S[L[i][M]].sz() >= x) {
-			r = M;
-		}
-		else {
-			l = M;
-		}
-	}
-	return r;
-}
- 
-inline ll bpr(ll i, ll x) {
-	ll l = -1, r = R[i].size(), M;
-	while (r - l > 1) {
-		M = (l + r) / 2;
-		if (S[R[i][M]].sz() >= x) {
-			r = M;
-		}
-		else {
-			l = M;
-		}
-	}
-	return r;
-}
- 
 inline ll fastL(ll i, ll x) {
 	if (L[i].empty()) {
 		return 0;
