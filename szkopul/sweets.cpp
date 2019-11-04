@@ -1,3 +1,11 @@
+/*
+    We use the inclusion-exclusion formula to find the answer(we iterate over the submasks and say that in these jars we take more candies
+    than we have). So now the problem becomes to find the amount of ways to take <= s candies from n jars, without the restriction on
+    the amount of candies in every jar. It's easy to see that it's equal to C(n + s, n) (binomial coefficient), because of the 
+    method of stars and bars. How to count the binomial coefficient (C(n + s, n)): we can see that it is equal to
+    (s + 1) * (s + 2) * .. * (s + n) / (1 * 2 * ... * n); So we can divide the numbers from the top with the numbers from down, where it
+    s possible, then we will only have to do multiplication, and it's possible even mod 2004.
+*/
 #include <bits/stdc++.h>
 #define pb push_back
 #define pll pair <ll, ll>
