@@ -1,3 +1,8 @@
+/*
+	We brute force, the number we will take. If we take it, then we know the next number we will have to take and so on. This way 
+	we find all the cycles. Then our task is to find some non-intersecting cycles, so that every box exists in one cycle. We
+	can do it in 3^n using dynamics over submasks. 
+*/
 #include <bits/stdc++.h>
 #define pb push_back
 #define pll pair <ll, ll>
