@@ -1,3 +1,8 @@
+/*
+	The idea is that E(x^k) is the expected number of arrays of size k of positions, on which try we will get joker. For a fixed
+	array this value is 1 / m ^ d, where d is the number of different numbers in this array, so we use dp to count the amount of 
+	such arrays for every d, and then find the sum of expected values for every d.
+*/
 #include <bits/stdc++.h>
 #define pb push_back
 #define pll pair <ll, ll>
